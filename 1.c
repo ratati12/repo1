@@ -13,7 +13,7 @@ int main()
     
     while((ch = getch()) != 'q')
     {
-        sleep(0.1);
+//        sleep(0.1);
         for (i=0; i<COLS; i++) 
         {
             mvaddch(0,i,'#');
