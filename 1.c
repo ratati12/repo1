@@ -11,9 +11,10 @@ int main()
     int y=LINES/2;
     int x=COLS/2;
     
-    while((ch = getch()) != 'q')
+
+    while(1)
     {
-//        sleep(0.1);
+        clear();
         for (i=0; i<COLS; i++) 
         {
             mvaddch(0,i,'#');
@@ -32,7 +33,8 @@ int main()
         else {if (y >= LINES-1) y=1;};
         if (x <= 0) {x=COLS-1;} 
         else {if (x >= COLS-1) x=0;};
-        clear();
+        refresh();
+        sleep(1);
         
     }
     refresh();
