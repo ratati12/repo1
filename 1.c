@@ -11,7 +11,7 @@ int main()
     int y=LINES/2;
     int x=COLS/2;
     
-    while(1)
+    while((ch = getch()) != 'q')
     {
         sleep(0.1);
         for (i=0; i<COLS; i++) 
@@ -28,7 +28,6 @@ int main()
         if (ch == KEY_LEFT) x--;
         if (ch == KEY_RIGHT) x++;*/
         if (ch == 'q') {break;}
-        ch = getch();
         if (y <= 0) {y=LINES-2;} 
         else {if (y >= LINES-1) y=1;};
         if (x <= 0) {x=COLS-1;} 
