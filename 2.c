@@ -2,41 +2,206 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-
+#define LENG 5
+#define POINT '#'
 
 void up();
 void down();
 void left();
 void right();
+void paint_arena();
 
-int x,y;
+struct coord 
+{
+    int x[LENG];
+    int y[LENG];
+};
 
 
 
 int main()
 {
+    struct coord snake;
     initscr();
     keypad (stdscr, TRUE);
     curs_set(0);
     nodelay(stdscr, TRUE);
     int ch;
-    y=LINES/2;
-    x=COLS/2;
-    mvaddch(y,x,'#');
-    refresh();
-    sleep(1);
-    up();
+    snake.y[0]=LINES/2;
+    snake.x[0]=COLS/2;
+   /* int i;
+    for (i=1; i<LENG; i++)
+    {
+        snake.y[i]=snake.y[i-1];
+        snake.x[i]=snake.x[i-1]-1;
+    }
+    for (i=0; i<LENG; i++)
+    {
+        mvaddch(snake.y[i],snake.x[i],POINT);
+    }
+
+    refresh();*/
+    sleep (3);
+    right(snake);
     sleep(5);
     endwin();
     return 0;
 }
 
 
-void up()
+
+
+void up(struct coord snake)
+{   
+    int i;
+/*    clear();
+
+    for (i = 0; i<LENG; i++)
+    {
+        snake.x[i]=snake.x[i-1];
+        snake.y[i]=snake.y[i-1]-1;
+    }
+    snake.y[0]--;
+
+    for (i = 1; i<LENG; i++)
+    {
+        mvaddch(snake.y[i],snake.x[i],POINT);
+    }
+    
+    refresh();*/
+    while (1)
+    {
+
+        clear();
+        paint_arena();
+
+        for (i = 1; i<LENG; i++)
+        {
+                snake.x[i]=snake.x[i-1];
+                snake.y[i]=snake.y[i-1]+1;
+        }
+        snake.y[0]--;
+
+        for (i = 1; i<LENG; i++)
+        {
+                mvaddch(snake.y[i],snake.x[i],POINT);
+        }
+
+        refresh();
+        usleep(500000);
+        int ch;
+        ch = getch();
+        if (snake.y[0] <= 0) {snake.y[0]=LINES-LENG;}
+        else {if (snake.y[0]>=LINES -LENG) snake.y[0]=(-1)*LENG;};
+        if (snake.x[0] <= 0) {snake.x[0]=COLS-LENG;}
+        else {if (snake.x[0] >= COLS-LENG) snake.x[0]=(-1)*LENG;};
+        if (ch == KEY_RIGHT) right(snake);
+        if (ch == KEY_LEFT) left(snake);
+        if (ch == 'q') {clear(); exit(0);} 
+
+
+    }
+}
+void down(struct coord snake)
 {   
     while (1)
     {
+        int i;
         clear();
+        paint_arena();
+        for (i = 1; i<LENG; i++)
+        {
+
+                snake.x[i]=snake.x[i-1];
+                snake.y[i]=snake.y[i-1]-1;
+        }
+        snake.y[0]++;
+        for (i = 1; i<LENG; i++)
+        {
+                mvaddch(snake.y[i],snake.x[i],POINT);
+        }
+
+        refresh();
+        usleep(500000);
+        int ch;
+        ch = getch();
+        if (snake.y[0] <= 0) {snake.y[0]=LINES-LENG;}
+        else {if (snake.y[0]>=LINES -LENG) snake.y[0]=(-1)*LENG;};
+        if (snake.x[0] <= 0) {snake.x[0]=COLS-LENG;}
+        else {if (snake.x[0] >= COLS-LENG) snake.x[0]=(-1)*LENG;};
+        if (ch == KEY_RIGHT) right(snake);
+        if (ch == KEY_LEFT) left(snake);
+        if (ch == 'q') {clear(); exit(0);} 
+    }
+}
+void left(struct coord snake)
+{   
+    while (1)
+    {
+        int i;
+        clear();
+        paint_arena();
+        for (i = 1; i<LENG; i++)
+        {
+                snake.x[i]=snake.x[i-1]-1;
+                snake.y[i]=snake.y[i-1];
+        }
+        snake.x[0]--;
+        for (i = 1; i<LENG; i++)
+        {
+                mvaddch(snake.y[i],snake.x[i],POINT);
+        }
+
+        refresh();
+        usleep(500000);
+        int ch;
+        ch = getch();
+        if (snake.y[0] <= 0) {snake.y[0]=LINES-LENG;}
+        else {if (snake.y[0]>=LINES-LENG) snake.y[0]=(-1)*LENG;};
+        if (snake.x[0] <= 0) {snake.x[0]=COLS-LENG;}
+        else {if (snake.x[0] >= COLS-LENG) snake.x[0]=(-1)*LENG;};
+        if (ch == KEY_DOWN) down(snake);
+        if (ch == KEY_UP) up(snake);
+        if (ch == 'q') {clear(); exit(0);} 
+
+
+    }
+}
+void right(struct coord snake)
+{   
+    while (1)
+    {
+        int i;
+        clear();
+        paint_arena();
+        for (i = 1; i<LENG; i++)
+        {
+                snake.x[i]=snake.x[i-1]+1;
+                snake.y[i]=snake.y[i-1];
+        }
+        snake.x[0]++;
+        for (i = 1; i<LENG; i++)
+        {
+                mvaddch(snake.y[i],snake.x[i],POINT);
+        }
+
+        refresh();
+        usleep(500000);
+        int ch;
+        ch = getch();
+        if (snake.y[0] <= 0) {snake.y[0]=LINES-LENG;}
+        else {if (snake.y[0]>=LINES -LENG) snake.y[0]=(-1)*LENG;};
+        if (snake.x[0] <= 0) {snake.x[0]=COLS-LENG;}
+        else {if (snake.x[0] >= COLS-LENG) snake.x[0]=(-1)*LENG;};
+        if (ch == KEY_DOWN) down(snake);
+        if (ch == KEY_UP) up(snake);
+        if (ch == 'q') {clear(); exit(0);} 
+
+    }
+}
+
+void paint_arena()
+{
         for (int i=0; i<COLS; i++)
         {
             mvaddch(0,i,'#');
@@ -44,112 +209,4 @@ void up()
             mvaddch(i,0,'#');
             mvaddch(i,COLS-1,'#');
         }    
-        y--;
-        mvaddch(y,x,'x');
-        refresh();
-        usleep(100000);
-        int ch;
-        ch = getch();
-        
-
-        if (y <= 0) {y=LINES-2;}
-        else {if (y>=LINES -1) y=1;};
-        if (x <= 0) {x=COLS-1;}
-        else {if (x >= COLS-1) x=0;};
-
-        if (ch == KEY_DOWN) down();
-        if (ch == KEY_RIGHT) right();
-        if (ch == KEY_LEFT) left();
-        if (ch == 'q') {clear(); exit(0);} 
-
-
-    }
 }
-void down()
-{   
-    while (1)
-    {
-
-
-        clear();
-        for (int i=0; i<COLS; i++)
-        {
-            mvaddch(0,i,'#');
-            mvaddch(LINES-1,i,'#');
-            mvaddch(i,0,'#');
-            mvaddch(i,COLS-1,'#');
-        }    
-        y++;
-        mvaddch(y,x,'x');
-        refresh();
-        usleep(100000);
-        int ch;
-        ch = getch();
-        if (y <= 0) {y=LINES-2;}
-        else {if (y>=LINES -1) y=1;};
-        if (x <= 0) {x=COLS-1;}
-        else {if (x >= COLS-1) x=0;};
-        if (ch == KEY_UP) up();
-        if (ch == KEY_RIGHT) right();
-        if (ch == KEY_LEFT) left();
-        if (ch == 'q') {clear(); exit(0);} 
-    }
-}
-void left()
-{   
-    while (1)
-    {
-        clear();
-        for (int i=0; i<COLS; i++)
-        {
-            mvaddch(0,i,'#');
-            mvaddch(LINES-1,i,'#');
-            mvaddch(i,0,'#');
-            mvaddch(i,COLS-1,'#');
-        }    
-        x--;
-        mvaddch(y,x,'x');
-        refresh();
-        usleep(100000);
-        int ch;
-        ch = getch();
-        if (y <= 0) {y=LINES-2;}
-        else {if (y>=LINES -1) y=1;};
-        if (x <= 0) {x=COLS-1;}
-        else {if (x >= COLS-1) x=0;};
-        if (ch == KEY_DOWN) down();
-        if (ch == KEY_RIGHT) right();
-        if (ch == KEY_UP) up();
-        if (ch == 'q') {clear(); exit(0);} 
-    }
-}
-void right()
-{   
-    while (1)
-    {
-        clear();
-        for (int i=0; i<COLS; i++)
-        {
-            mvaddch(0,i,'#');
-            mvaddch(LINES-1,i,'#');
-            mvaddch(i,0,'#');
-            mvaddch(i,COLS-1,'#');
-        }    
-        x++;
-        mvaddch(y,x,'x');
-        refresh();
-        usleep(100000);
-        int ch;
-        ch = getch();
-        if (y <= 0) {y=LINES-2;}
-        else {if (y>=LINES -1) y=1;};
-        if (x <= 0) {x=COLS-1;}
-        else {if (x >= COLS-1) x=0;};
-        if (ch == KEY_DOWN) down();
-        if (ch == KEY_UP) up();
-        if (ch == KEY_LEFT) left();
-        if (ch == 'q') {clear(); exit(0);} 
-    }
-}
-
-
