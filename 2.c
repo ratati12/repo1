@@ -2,16 +2,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#define LENG 4
+#define LENG 7
 #define POINT '#'
-#define DELAY 200000
+#define DELAY 700000
 
 void up();
 void down();
 void left();
 void right();
 void paint_arena();
-void dogon();
+void debug(int c)
+{
+int i;
+for (i=c; i>0; i--)
+{
+    mvprintw(2,COLS/2, "DEBUG: %d",i);
+    refresh();
+    sleep(1);
+}
+}
 
 struct coord 
 {
@@ -37,36 +46,56 @@ int main()
     return 0;
 }
 
-void dogon(struct coord snake)
-{
 
-
-}
 
 
 void up(struct coord snake)
 {   
-    dogon(snake);
     int i, ch;
-    snake.y[0]=snake.y[0]-LENG;
+    int j;
+    int k;
+    for (i = LENG; i>0; i--)
+    {
+        clear();
+        paint_arena();
+        j=LENG-1;
+        while (j!= 0)
+        {
+            snake.x[j]=snake.x[j-1];
+            snake.y[j]=snake.y[j-1];
+            j--;
+        }
+        snake.y[0]--; 
+
+        for (k = 0; k <LENG; k++) 
+        {
+            mvprintw(k+2, 2,"x[%d]=%d,y[%d]=%d", k, snake.x[k],k, snake.y[k]);
+            mvaddch(snake.y[k],snake.x[k],POINT);
+        }
+        usleep(DELAY);
+        refresh();
+    }
+        
     while (1)
     {
         clear();
+
         paint_arena();
 
         for (i = 1; i<LENG; i++)
         {
                 snake.x[i]=snake.x[i-1];
                 snake.y[i]=snake.y[i-1]+1;
-
-
         }
         mvprintw(1, 2,"x[MAX]=%d,y[MAX]=%d", COLS, LINES);
         
+
+
         for (i = 0; i<LENG; i++)
         {
                 mvaddch(snake.y[i],snake.x[i],POINT);
                 mvprintw(i+2, 2,"x[%d]=%d,y[%d]=%d", i, snake.x[i], i, snake.y[i]);
+
         }
         snake.y[0]--;
         refresh();
@@ -80,12 +109,35 @@ void up(struct coord snake)
 
     }
 }
+
+
 void down(struct coord snake)
 {   
-    int i, ch;
+   int i, ch;
+    int j;
+    int k;
+    for (i = LENG; i>0; i--)
+    {
+        clear();
+        paint_arena();
+        j=LENG-1;
+        while (j!= 0)
+        {
+            snake.x[j]=snake.x[j-1];
+            snake.y[j]=snake.y[j-1];
+            j--;
+        }
 
-    
-    snake.y[0]=snake.y[0]+LENG;
+        snake.y[0]++; 
+
+        for (k = 0; k <LENG; k++) 
+        {
+            mvprintw(k+2, 2,"x[%d]=%d,y[%d]=%d", k, snake.x[k],k, snake.y[k]);
+            mvaddch(snake.y[k],snake.x[k],POINT);
+        }
+        usleep(DELAY);
+        refresh();
+    } 
     while (1)
     {
         clear();
@@ -116,7 +168,6 @@ void down(struct coord snake)
 void left(struct coord snake)
 {   
     int i, ch;
-    snake.x[0]=snake.x[0]+LENG;
     while (1)
     {
         clear();
@@ -149,7 +200,6 @@ void left(struct coord snake)
 void right(struct coord snake)
 {   
     int i, ch;
-    snake.x[0]=snake.x[0]+LENG;
     while (1)
     {
         clear();
