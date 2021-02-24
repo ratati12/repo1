@@ -12,6 +12,9 @@ void coord_debugger();
 void tank_ad();
 void tank_wx();
 
+void tank_ez();
+void tank_qc();
+
 int main()
 {
     struct coord tank;
@@ -219,8 +222,27 @@ void tank_move(struct coord tank)
         napr = 2;
         tank_wx(tank,napr);
     }
-
-    if (ch == 'q') {clear(); exit(0);}
+    if (ch == 'e') 
+    {   
+        napr=0;
+        tank_ez(tank,napr, napr+2);
+    }
+    if (ch == 'z') 
+    {   
+        napr=2;
+        tank_ez(tank,napr, napr-2);
+    }
+    if (ch == 'q') 
+    {   
+        napr=0;
+        tank_qc(tank,napr);
+    }
+    if (ch == 'c') 
+    {   
+        napr=2;
+        tank_qc(tank,napr);
+    }
+    if (ch == 27) {clear(); exit(0);}
     }
 }
 
@@ -260,8 +282,32 @@ void tank_wx(struct coord tank,int napr)
     refresh();
     tank_move(tank);
 }
-
-
+void tank_ez(struct coord tank,int j, int z)
+{
+    int i=0;
+    clear();
+    mvaddch(tank.y[0], tank.x[1], '#');
+    mvaddch(tank.y[1], tank.x[0], '#');
+    mvaddch(tank.y[1], tank.x[2], '#');
+    mvaddch(tank.y[2], tank.x[1], '#');
+    mvaddch(tank.y[1], tank.x[1], 'O');
+    mvaddch(tank.y[j], tank.x[z], '/');
+    refresh();
+    tank_move(tank);
+}
+void tank_qc(struct coord tank,int napr)
+{
+    int i=0;
+    clear();
+    mvaddch(tank.y[0], tank.x[1], '#');
+    mvaddch(tank.y[1], tank.x[0], '#');
+    mvaddch(tank.y[1], tank.x[2], '#');
+    mvaddch(tank.y[2], tank.x[1], '#');
+    mvaddch(tank.y[1], tank.x[1], 'O');
+    mvaddch(tank.y[napr], tank.x[napr], 92);
+    refresh();
+    tank_move(tank);
+}
 void coord_debugger(struct coord tank)
 {
     int i;
