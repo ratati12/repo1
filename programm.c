@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <wait.h>
 typedef void (*func)();
 void success();
 void error();
@@ -10,34 +12,32 @@ int main (int argc, char* argv[])
     int64_t h;
     int64_t s;
     int64_t offset;
+    int pid = fork();
+    if (pid == 0) {
     s = 883; //hash(password)
     if (argv[1] == NULL) return -1; //check for pass
-
     h = hash(argv[1]); //hash counter
-    printf ("HASH: %ld\n", h); //DEBUG
-    
     offset = (int64_t)(&success)+s;
-    printf ("OFFSET:%ld\n", offset); //DEBUG
-    
     offset -=h;
-    printf ("ADDR:%ld\n", offset); //DEBUG
-    
     func f =(func)offset;
-    f(); 
-
+    f();
+    return 0;
+    }
+    int status = 0;
+    wait(&status);
+    if (WIFEXITED(status)) 
+    { 
+        const int es = WEXITSTATUS(status);
+        (void)es;
+    } else {
+        printf ("Wrong password!\n");
+    }
     return 0;
 }
 
 void success()
 {
     char* msg = "Welcome!\n";
-    printf ("%s", msg);
-}
-
-
-void error()
-{
-    char* msg = "Wrong password!\n";
     printf ("%s", msg);
 }
 
